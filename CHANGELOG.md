@@ -217,6 +217,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     [issue #1704](https://github.com/dsccommunity/SqlServerDsc/issues/1704),
     and [issue #752](https://github.com/dsccommunity/SqlServerDsc/issues/752).
   - The resource was refactored into a class-based resource.
+- SqlSetup
+  - Does not attempt to connect to the SQL service when the
+    PrepareFailoverCluster action is defined
 
 ### Fixed
 

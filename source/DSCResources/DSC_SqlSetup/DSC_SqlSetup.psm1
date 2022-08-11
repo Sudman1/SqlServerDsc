@@ -48,7 +48,7 @@ $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 #>
 function Get-TargetResource
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is called implicitly in several function, for example Get-SqlEngineProperties')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is called implicitly in several function, for example Get-SqlEngineProperties')]
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
     param
@@ -58,7 +58,7 @@ function Get-TargetResource
         [System.String]
         $Action = 'Install',
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $SourcePath,
 
@@ -147,6 +147,12 @@ function Get-TargetResource
     }
 
     <#
+        After completing ome actions, setup.exe does not (and cannot) start the SQL service, so we must
+        skip attempts to connect to the service to avoid stopping errors.
+    #>
+    $actionsWithoutServerAccess = @("PrepareFailoverCluster")
+
+    <#
         $sqlHostName is later used by helper function to connect to the instance
         for the Database Engine or the Analysis Services.
     #>
@@ -203,21 +209,24 @@ function Get-TargetResource
         $features += 'SQLENGINE,'
 
         # Get current properties for the feature SQLENGINE.
-        $currentSqlEngineProperties = Get-SqlEngineProperties -ServerName $sqlHostName -InstanceName $InstanceName
+        if ($Action -notin $actionsWithoutServerAccess)
+        {
+            $currentSqlEngineProperties = Get-SqlEngineProperties -ServerName $sqlHostName -InstanceName $InstanceName
 
-        $getTargetResourceReturnValue.SQLSvcAccountUsername = $currentSqlEngineProperties.SQLSvcAccountUsername
-        $getTargetResourceReturnValue.AgtSvcAccountUsername = $currentSqlEngineProperties.AgtSvcAccountUsername
-        $getTargetResourceReturnValue.SqlSvcStartupType = $currentSqlEngineProperties.SqlSvcStartupType
-        $getTargetResourceReturnValue.AgtSvcStartupType = $currentSqlEngineProperties.AgtSvcStartupType
-        $getTargetResourceReturnValue.SQLCollation = $currentSqlEngineProperties.SQLCollation
-        $getTargetResourceReturnValue.InstallSQLDataDir = $currentSqlEngineProperties.InstallSQLDataDir
-        $getTargetResourceReturnValue.SQLUserDBDir = $currentSqlEngineProperties.SQLUserDBDir
-        $getTargetResourceReturnValue.SQLUserDBLogDir = $currentSqlEngineProperties.SQLUserDBLogDir
-        $getTargetResourceReturnValue.SQLBackupDir = $currentSqlEngineProperties.SQLBackupDir
-        $getTargetResourceReturnValue.IsClustered = $currentSqlEngineProperties.IsClustered
-        $getTargetResourceReturnValue.SecurityMode = $currentSqlEngineProperties.SecurityMode
+            $getTargetResourceReturnValue.SQLSvcAccountUsername = $currentSqlEngineProperties.SQLSvcAccountUsername
+            $getTargetResourceReturnValue.AgtSvcAccountUsername = $currentSqlEngineProperties.AgtSvcAccountUsername
+            $getTargetResourceReturnValue.SqlSvcStartupType = $currentSqlEngineProperties.SqlSvcStartupType
+            $getTargetResourceReturnValue.AgtSvcStartupType = $currentSqlEngineProperties.AgtSvcStartupType
+            $getTargetResourceReturnValue.SQLCollation = $currentSqlEngineProperties.SQLCollation
+            $getTargetResourceReturnValue.InstallSQLDataDir = $currentSqlEngineProperties.InstallSQLDataDir
+            $getTargetResourceReturnValue.SQLUserDBDir = $currentSqlEngineProperties.SQLUserDBDir
+            $getTargetResourceReturnValue.SQLUserDBLogDir = $currentSqlEngineProperties.SQLUserDBLogDir
+            $getTargetResourceReturnValue.SQLBackupDir = $currentSqlEngineProperties.SQLBackupDir
+            $getTargetResourceReturnValue.IsClustered = $currentSqlEngineProperties.IsClustered
+            $getTargetResourceReturnValue.SecurityMode = $currentSqlEngineProperties.SecurityMode
+        }
 
-        Write-Verbose -Message $script:localizedData.EvaluateReplicationFeature
+        Write-Verbose -Message ($script:localizedData.EvaluateReplicationFeature -f $replicationRegistryPath)
 
         # Check if Replication sub component is configured for this instance
         $isReplicationInstalled = Test-IsReplicationFeatureInstalled -InstanceName $InstanceName
@@ -233,7 +242,7 @@ function Get-TargetResource
             Write-Verbose -Message $script:localizedData.ReplicationFeatureNotFound
         }
 
-        Write-Verbose -Message $script:localizedData.EvaluateDataQualityServicesFeature
+        Write-Verbose -Message ($script:localizedData.EvaluateDataQualityServicesFeature -f $dataQualityServicesRegistryPath)
 
         # Check if the Data Quality Services sub component is configured.
         $isDQInstalled = Test-IsDQComponentInstalled -InstanceName $InstanceName -SqlServerMajorVersion $sqlVersion
@@ -254,10 +263,9 @@ function Get-TargetResource
         $getTargetResourceReturnValue.InstanceID = $fullInstanceId.Split('.')[1]
 
         # Get the instance program path.
-        $getTargetResourceReturnValue.InstanceDir = `
-            Get-InstanceProgramPath -InstanceName $InstanceName
+        $getTargetResourceReturnValue.InstanceDir = Get-InstanceProgramPath -InstanceName $InstanceName
 
-        if ($sqlVersion -ge 13)
+        if ($sqlVersion -ge 13 -and $Action -notin $actionsWithoutServerAccess)
         {
             # Retrieve information about Tempdb database and its files.
             $currentTempDbProperties = Get-TempDbProperties -ServerName $sqlHostName -InstanceName $InstanceName
@@ -271,8 +279,11 @@ function Get-TargetResource
         }
 
         # Get all members of the sysadmin role.
-        $sqlSystemAdminAccounts = Get-SqlRoleMembers -RoleName 'sysadmin' -ServerName $sqlHostName -InstanceName $InstanceName
-        $getTargetResourceReturnValue.SQLSysAdminAccounts = $sqlSystemAdminAccounts
+        if ($Action -notin $actionsWithoutServerAccess)
+        {
+            $sqlSystemAdminAccounts = Get-SqlRoleMembers -RoleName 'sysadmin' -ServerName $sqlHostName -InstanceName $InstanceName
+            $getTargetResourceReturnValue.SQLSysAdminAccounts = $sqlSystemAdminAccounts
+        }
 
         if ($getTargetResourceReturnValue.IsClustered)
         {
@@ -645,8 +656,16 @@ function Get-TargetResource
 #>
 function Set-TargetResource
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Justification='Because $global:DSCMachineStatus is used to trigger a Restart, either by force or when there are pending changes.')]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification='Because $global:DSCMachineStatus is only set, never used (by design of Desired State Configuration).')]
+    <#
+        Suppressing this rule because $global:DSCMachineStatus is used to trigger
+        a reboot, either by force or when there are pending changes.
+    #>
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
+    <#
+        Suppressing this rule because $global:DSCMachineStatus is only set,
+        never used (by design of Desired State Configuration).
+    #>
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
     [CmdletBinding()]
     param
     (
@@ -655,7 +674,7 @@ function Set-TargetResource
         [System.String]
         $Action = 'Install',
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $SourcePath,
 
@@ -983,7 +1002,6 @@ function Set-TargetResource
     $featuresToInstall = ''
 
     $featuresArray = $Features -split ','
-    $foundFeaturesArray = $getTargetResourceResult.Features -split ','
 
     foreach ($feature in $featuresArray)
     {
@@ -992,6 +1010,8 @@ function Set-TargetResource
             $errorMessage = $script:localizedData.FeatureNotSupported -f $feature
             New-InvalidOperationException -Message $errorMessage
         }
+
+        $foundFeaturesArray = $getTargetResourceResult.Features -split ','
 
         if ($feature -notin $foundFeaturesArray)
         {
@@ -1557,8 +1577,6 @@ function Set-TargetResource
 
         $setupExitMessage = ($script:localizedData.SetupExitMessage -f $processExitCode)
 
-        $setupEndedInError = $false
-
         if ($processExitCode -eq 3010 -and -not $SuppressReboot)
         {
             $setupExitMessageRebootRequired = ('{0} {1}' -f $setupExitMessage, ($script:localizedData.SetupSuccessfulRebootRequired))
@@ -1618,10 +1636,17 @@ function Set-TargetResource
             Import-SQLPSModule -Force
         }
 
-        if (-not (Test-TargetResource @PSBoundParameters))
+        # Do not test the installation if preparing the failover cluster. The service will not be running to query.
+        if ($Action -notin $actionsWithoutServerAccess)
         {
-            $errorMessage = $script:localizedData.TestFailedAfterSet
-            New-InvalidResultException -Message $errorMessage
+            Write-Verbose "$action selected. Testing the setup"
+            if (-not (Test-TargetResource @PSBoundParameters))
+            {
+                $errorMessage = $script:localizedData.TestFailedAfterSet
+                New-InvalidResultException -Message $errorMessage
+            }
+        } else {
+            Write-Verbose "$action selected. Not testing the setup"
         }
     }
     catch
@@ -1857,7 +1882,7 @@ function Set-TargetResource
 #>
 function Test-TargetResource
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is implicitly called when Get-TargetResource is called')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is implicitly called when Get-TargetResource is called')]
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param
@@ -1867,7 +1892,7 @@ function Test-TargetResource
         [System.String]
         $Action = 'Install',
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $SourcePath,
 
@@ -2539,22 +2564,25 @@ function Get-SqlEngineProperties
     #$agentServiceCimInstance = Get-CimInstance -ClassName 'Win32_Service' -Filter ("Name = '{0}'" -f $serviceNames.AgentService)
     $sqlAgentService = Get-ServiceProperties -ServiceName $serviceNames.AgentService
 
-    $sqlServerObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName
+    if ($Action -notin $actionsWithoutServerAccess)
+        {
+        $sqlServerObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName
 
-    $sqlCollation = $sqlServerObject.Collation
-    $isClustered = $sqlServerObject.IsClustered
-    $installSQLDataDirectory = $sqlServerObject.InstallDataDirectory
-    $sqlUserDatabaseDirectory = $sqlServerObject.DefaultFile
-    $sqlUserDatabaseLogDirectory = $sqlServerObject.DefaultLog
-    $sqlBackupDirectory = $sqlServerObject.BackupDirectory
+        $sqlCollation = $sqlServerObject.Collation
+        $isClustered = $sqlServerObject.IsClustered
+        $installSQLDataDirectory = $sqlServerObject.InstallDataDirectory
+        $sqlUserDatabaseDirectory = $sqlServerObject.DefaultFile
+        $sqlUserDatabaseLogDirectory = $sqlServerObject.DefaultLog
+        $sqlBackupDirectory = $sqlServerObject.BackupDirectory
 
-    if ($sqlServerObject.LoginMode -eq 'Mixed')
-    {
-        $securityMode = 'SQL'
-    }
-    else
-    {
-        $securityMode = 'Windows'
+        if ($sqlServerObject.LoginMode -eq 'Mixed')
+        {
+            $securityMode = 'SQL'
+        }
+        else
+        {
+            $securityMode = 'Windows'
+        }
     }
 
     return @{
