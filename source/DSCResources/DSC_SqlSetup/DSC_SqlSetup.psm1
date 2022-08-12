@@ -48,7 +48,7 @@ $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 #>
 function Get-TargetResource
 {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is called implicitly in several function, for example Get-SqlEngineProperties')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification = 'The command Connect-Sql is called implicitly in several function, for example Get-SqlEngineProperties')]
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
     param
@@ -150,7 +150,7 @@ function Get-TargetResource
         After completing ome actions, setup.exe does not (and cannot) start the SQL service, so we must
         skip attempts to connect to the service to avoid stopping errors.
     #>
-    $actionsWithoutServerAccess = @("PrepareFailoverCluster")
+    $actionsWithoutServerAccess = @('PrepareFailoverCluster')
 
     <#
         $sqlHostName is later used by helper function to connect to the instance
@@ -1185,7 +1185,7 @@ function Set-TargetResource
         # If no IP Address has been specified, use "DEFAULT"
         if ($FailoverClusterIPAddress.Count -eq 0)
         {
-            $clusterIPAddresses += "DEFAULT"
+            $clusterIPAddresses += 'DEFAULT'
         }
         else
         {
@@ -1431,7 +1431,7 @@ function Set-TargetResource
                 $setupArguments['ASSysAdminAccounts'] = @($PsDscContext.RunAsUser)
             }
 
-            if ($PSBoundParameters.ContainsKey("ASSysAdminAccounts"))
+            if ($PSBoundParameters.ContainsKey('ASSysAdminAccounts'))
             {
                 $setupArguments['ASSysAdminAccounts'] += $ASSysAdminAccounts
             }
@@ -1539,12 +1539,12 @@ function Set-TargetResource
     $log = $arguments
     if ($SecurityMode -eq 'SQL')
     {
-        $log = $log.Replace($SAPwd.GetNetworkCredential().Password, "********")
+        $log = $log.Replace($SAPwd.GetNetworkCredential().Password, '********')
     }
 
-    if ($ProductKey -ne "")
+    if ($ProductKey -ne '')
     {
-        $log = $log.Replace($ProductKey, "*****-*****-*****-*****-*****")
+        $log = $log.Replace($ProductKey, '*****-*****-*****-*****-*****')
     }
 
     $logVars = @('AgtSvcAccount', 'SQLSvcAccount', 'FTSvcAccount', 'RSSvcAccount', 'ASSvcAccount', 'ISSvcAccount')
@@ -1552,7 +1552,7 @@ function Set-TargetResource
     {
         if ($PSBoundParameters.ContainsKey($logVar))
         {
-            $log = $log.Replace((Get-Variable -Name $logVar).Value.GetNetworkCredential().Password, "********")
+            $log = $log.Replace((Get-Variable -Name $logVar).Value.GetNetworkCredential().Password, '********')
         }
     }
 
@@ -1645,7 +1645,9 @@ function Set-TargetResource
                 $errorMessage = $script:localizedData.TestFailedAfterSet
                 New-InvalidResultException -Message $errorMessage
             }
-        } else {
+        }
+        else
+        {
             Write-Verbose "$action selected. Not testing the setup"
         }
     }
@@ -1882,7 +1884,7 @@ function Set-TargetResource
 #>
 function Test-TargetResource
 {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is implicitly called when Get-TargetResource is called')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification = 'The command Connect-Sql is implicitly called when Get-TargetResource is called')]
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param
@@ -2199,7 +2201,7 @@ function Test-TargetResource
         Write-Verbose -Message $script:localizedData.EvaluatingClusterParameters
 
         $variableNames = $boundParameters.Keys |
-            Where-Object -FilterScript { $_ -imatch "^FailoverCluster" }
+            Where-Object -FilterScript { $_ -imatch '^FailoverCluster' }
 
         foreach ($variableName in $variableNames)
         {
@@ -2565,7 +2567,7 @@ function Get-SqlEngineProperties
     $sqlAgentService = Get-ServiceProperties -ServiceName $serviceNames.AgentService
 
     if ($Action -notin $actionsWithoutServerAccess)
-        {
+    {
         $sqlServerObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName
 
         $sqlCollation = $sqlServerObject.Collation
