@@ -413,15 +413,15 @@ class SqlSetupBase : ResourceBase
             # Should not be passed when PrepareFailoverCluster is specified
             if ($this.Action -in @('Install', 'Upgrade', 'InstallFailoverCluster', 'CompleteFailoverCluster'))
             {
-                if ($null -ne $PsDscContext.RunAsUser)
+                if ($null -ne $global:PsDscContext.RunAsUser)
                 {
                     <#
                         Add the credentials from the parameter PsDscRunAsCredential, as the first
-                        system administrator. The username is stored in $PsDscContext.RunAsUser.
+                        system administrator. The username is stored in $global:PsDscContext.RunAsUser.
                     #>
-                    Write-Verbose -Message ($script:localizedData.AddingFirstSystemAdministratorSqlServer -f $($PsDscContext.RunAsUser))
+                    Write-Verbose -Message ($script:localizedData.AddingFirstSystemAdministratorSqlServer -f $($global:PsDscContext.RunAsUser))
 
-                    $setupArguments['SQLSysAdminAccounts'] = @($PsDscContext.RunAsUser)
+                    $setupArguments['SQLSysAdminAccounts'] = @($global:PsDscContext.RunAsUser)
                 }
 
                 if ($this.SQLSysAdminAccounts)
@@ -559,15 +559,15 @@ class SqlSetupBase : ResourceBase
 
             if ($this.Action -in ('Install', 'Upgrade', 'InstallFailoverCluster', 'CompleteFailoverCluster'))
             {
-                if ($null -ne $PsDscContext.RunAsUser)
+                if ($null -ne $global:PsDscContext.RunAsUser)
                 {
                     <#
                     Add the credentials from the parameter PsDscRunAsCredential, as the first
-                    system administrator. The username is stored in $PsDscContext.RunAsUser.
+                    system administrator. The username is stored in $global:PsDscContext.RunAsUser.
                 #>
-                    Write-Verbose -Message ($script:localizedData.AddingFirstSystemAdministratorAnalysisServices -f $($PsDscContext.RunAsUser))
+                    Write-Verbose -Message ($script:localizedData.AddingFirstSystemAdministratorAnalysisServices -f $($global:PsDscContext.RunAsUser))
 
-                    $setupArguments['ASSysAdminAccounts'] = @($PsDscContext.RunAsUser)
+                    $setupArguments['ASSysAdminAccounts'] = @($global:PsDscContext.RunAsUser)
                 }
 
                 if ($this.ASSysAdminAccounts)
