@@ -37,7 +37,6 @@ class SqlSetupBase : ResourceBase
 
     SqlSetupBase() : base ()
     {
-
     }
 
     [SqlSetupBase] Get()
@@ -65,12 +64,11 @@ class SqlSetupBase : ResourceBase
     #>
     hidden [void] Modify([System.Collections.Hashtable] $properties)
     {
-
         <#
             Fixing issue 448, setting FailoverClusterGroupName to default value
             if not specified in configuration.
         #>
-        if ($null -eq $FailoverClusterGroupName)
+        if ($null -eq $this.FailoverClusterGroupName)
         {
             $this.FailoverClusterGroupName = 'SQL Server ({0})' -f $this.InstanceName
         }
@@ -120,7 +118,7 @@ class SqlSetupBase : ResourceBase
             }
         }
 
-        $SourcePath = [Environment]::ExpandEnvironmentVariables($SourcePath)
+        $SourcePath = [Environment]::ExpandEnvironmentVariables($this.SourcePath)
 
         if ($this.SourceCredential)
         {
@@ -428,7 +426,7 @@ class SqlSetupBase : ResourceBase
 
                 if ($this.SQLSysAdminAccounts)
                 {
-                    $setupArguments['SQLSysAdminAccounts'] += $SQLSysAdminAccounts
+                    $setupArguments['SQLSysAdminAccounts'] += $this.SQLSysAdminAccounts
                 }
 
                 if ($null -ne $this.NpEnabled)
