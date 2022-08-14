@@ -427,41 +427,6 @@ Configuration DSC_SqlSetup_InstallDatabaseEngineDefaultInstanceAsUser_Config
 
 <#
     .SYNOPSIS
-        Prepares a failover cluster with a default instance of Database Engine.
-#>
-Configuration DSC_SqlSetup_PrepareFailoverClusterDefaultInstanceAsUser_Config
-{
-    Import-DscResource -ModuleName 'SqlServerDsc'
-
-    node $AllNodes.NodeName
-    {
-        SqlSetup 'Integration_Test'
-        {
-            FeatureFlag          = @()
-
-            Action               = "PrepareFailoverCluster"
-            InstanceName         = $Node.DatabaseEngineDefaultInstanceName
-            Features             = $Node.DatabaseEngineDefaultInstanceFeatures
-            SourcePath           = "$($Node.DriveLetter):\"
-            SQLCollation         = $Node.Collation
-            SQLSvcAccount        = $SqlServicePrimaryCredential
-            AgtSvcAccount        = $SqlAgentServicePrimaryCredential
-            InstallSharedDir     = $Node.InstallSharedDir
-            InstallSharedWOWDir  = $Node.InstallSharedWOWDir
-            UpdateEnabled        = $Node.UpdateEnabled
-            SuppressReboot       = $Node.SuppressReboot
-            ForceReboot          = $Node.ForceReboot
-            SQLSysAdminAccounts  = @(
-                Split-Path -Path $SqlAdministratorCredential.UserName -Leaf
-            )
-
-            PsDscRunAsCredential = $SqlInstallCredential
-        }
-    }
-}
-
-<#
-    .SYNOPSIS
         Stopping the default instance to save memory on the build worker.
 #>
 Configuration DSC_SqlSetup_StopSqlServerDefaultInstance_Config
