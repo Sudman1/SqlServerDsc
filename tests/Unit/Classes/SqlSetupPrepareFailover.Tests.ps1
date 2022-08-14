@@ -185,7 +185,6 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                                 FailoverClusterGroupName   = $null
                                 FailoverClusterIPAddress   = $null
                                 UseEnglish                 = $true
-
                         }
                     }
                 }
@@ -1899,11 +1898,11 @@ Describe 'SqlSetupPrepareFailoverCluster\AssertProperties()' -Tag 'AssertPropert
                             $MockPropertyName = [DatabasePermission[]] @(
                                 [DatabasePermission] @{
                                     State      = 'Grant'
-                                    <#
-                                    This should not be able to be $null since the property
-                                    is mandatory but do allow empty collection. So no need
-                                    to test using $null value.
-                                #>
+                                    #
+                                        This should not be able to be $null since the property
+                                        is mandatory but do allow empty collection. So no need
+                                        to test using $null value.
+                                    #
                                     Permission = @()
                                 }
                                 [DatabasePermission] @{
