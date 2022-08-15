@@ -33,13 +33,13 @@
         'PSUseApprovedVerbs'
         'PSUseCmdletCorrectly'
         'PSUseOutputTypeCorrectly'
-        'PSAvoidGlobalVars'
+#        'PSAvoidGlobalVars'
         'PSAvoidUsingConvertToSecureStringWithPlainText'
         'PSAvoidUsingPlainTextForPassword'
         'PSAvoidUsingUsernameAndPasswordParams'
         'PSDSCUseVerboseMessageInDSCResource'
         'PSShouldProcess'
-        'PSUseDeclaredVarsMoreThanAssignments'
+#        'PSUseDeclaredVarsMoreThanAssignments'
         'PSUsePSCredentialType'
 
         # Additional rules from the module ScriptAnalyzer

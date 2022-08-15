@@ -13,10 +13,6 @@
 
 class SqlSetupBase : ResourceBase
 {
-    [DscProperty(Key)]
-    [System.String]
-    $Action
-
     [DscProperty()]
     [System.Boolean]
     $SuppressReboot
@@ -118,7 +114,7 @@ class SqlSetupBase : ResourceBase
             }
         }
 
-        $SourcePath = [Environment]::ExpandEnvironmentVariables($this.SourcePath)
+        $this.SourcePath = [Environment]::ExpandEnvironmentVariables($this.SourcePath)
 
         if ($this.SourceCredential)
         {
@@ -1149,8 +1145,10 @@ class SqlSetupBase : ResourceBase
         #(Different Action types take different properties)
         $applicableProperties = $this | Get-Member -MemberType Property | Select-Object -ExpandProperty Name
 
-        foreach ($propertyName in $getTargetResourceReturnValue.Keys) {
-            if ($propertyName -notin $applicableProperties) {
+        foreach ($propertyName in $getTargetResourceReturnValue.Keys)
+        {
+            if ($propertyName -notin $applicableProperties)
+            {
                 $getTargetResourceReturnValue.Remove($propertyName)
             }
         }
@@ -1470,7 +1468,6 @@ class SqlSetupBase : ResourceBase
     #>
     hidden [System.String] GetFullInstanceId([System.String] $InstanceName)
     {
-
         $getRegistryPropertyValueParameters = @{
             Path = 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL'
             Name = $InstanceName
@@ -1959,7 +1956,6 @@ class SqlSetupBase : ResourceBase
     #>
     hidden [System.Collections.Hashtable] GetSqlSharedPaths([System.Int32] $SqlServerMajorVersion)
     {
-
         $installSharedDir = $null
         $installSharedWOWDir = $null
         $registryKeySharedDir = $null

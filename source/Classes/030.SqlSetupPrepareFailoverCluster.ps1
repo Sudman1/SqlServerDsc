@@ -44,6 +44,10 @@
 [DscResource(RunAsCredential = 'NotSupported')]
 class SqlSetupPrepareFailoverCluster : SqlSetupBase
 {
+    [DscProperty(Key)]
+    [System.String]
+    $Action = "PrepareFailoverCluster"
+
     [DscProperty()]
     [System.String]
     $SourcePath
