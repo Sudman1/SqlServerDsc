@@ -93,9 +93,9 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                 InModuleScope -ScriptBlock {
                     $script:mockCredential = [pscredential]::new('mockUser', (ConvertTo-SecureString -String 'mock' -Force -AsPlainText))
                     $script:mockSqlSetupPrepareFailoverClusterInstance = [SqlSetupPrepareFailoverCluster] @{
-                        SourcePath = 'C:\this\is\a\mocked\path\'
-                        SourceCredential = $script:mockCredential
-                        Features = @(
+                        SourcePath          = 'C:\this\is\a\mocked\path\'
+                        SourceCredential    = $script:mockCredential
+                        Features            = @(
                             'SQL', 'SQLEngine', 'Replication', 'FullText', 'DQ', 'PolyBase',
                             'PolyBaseCore', 'PolyBaseJava', 'AdvancedAnalytics', 'SQL_INST_MR',
                             'SQL_INST_MPY', 'SQL_INST_JAVA', 'AS', 'RS', 'RS_SHP', 'RS_SHPWFE',
@@ -103,21 +103,21 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                             'SQL_SHARED_MR', 'Tools', 'BC', 'Conn', 'DREPLAY_CTLR',
                             'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB'
                         )
-                        InstanceDir = 'c:\mock'
-                        InstanceID = 'mock'
-                        InstanceName = 'mock'
-                        UpdateEnabled = $false
-                        UpdateSource = "MU"
-                        InstallSharedDir = "c:\mock"
-                        InstallSharedWOWDir = "c:\mock"
-                        SQLSvcAccount = $script:mockCredential
-                        AgtSvcAccount = $script:mockCredential
-                        FTSvcAccount = $script:mockCredential
-                        RSSvcAccount = $script:mockCredential
-                        RSInstallMode = "DefaultNativeMode"
-                        ASSvcAccount = $script:mockCredential
-                        ISSvcAccount = $script:mockCredential
-                        UseEnglish = $true
+                        InstanceDir         = 'c:\mock'
+                        InstanceID          = 'mock'
+                        InstanceName        = 'mock'
+                        UpdateEnabled       = $false
+                        UpdateSource        = 'MU'
+                        InstallSharedDir    = 'c:\mock'
+                        InstallSharedWOWDir = 'c:\mock'
+                        SQLSvcAccount       = $script:mockCredential
+                        AgtSvcAccount       = $script:mockCredential
+                        FTSvcAccount        = $script:mockCredential
+                        RSSvcAccount        = $script:mockCredential
+                        RSInstallMode       = 'DefaultNativeMode'
+                        ASSvcAccount        = $script:mockCredential
+                        ISSvcAccount        = $script:mockCredential
+                        UseEnglish          = $true
                     }
 
                     <#
@@ -128,13 +128,13 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                         to get the result to return from the derived method Get().
                     #>
                     $script:mockSqlSetupPrepareFailoverClusterInstance |
-                    Add-Member -Force -MemberType 'ScriptMethod' -Name 'GetCurrentState' -Value {
-                        return [System.Collections.Hashtable] @{
-                                Action                     = "PrepareFailoverCluster"
-                                SourcePath                 = "c:\this\is\a\mocked\path\"
+                        Add-Member -Force -MemberType 'ScriptMethod' -Name 'GetCurrentState' -Value {
+                            return [System.Collections.Hashtable] @{
+                                Action                     = 'PrepareFailoverCluster'
+                                SourcePath                 = 'c:\this\is\a\mocked\path\'
                                 SourceCredential           = $script:mockCredential
-                                InstanceName               = "mock"
-                                RSInstallMode              = "DefaultNativeMode"
+                                InstanceName               = 'mock'
+                                RSInstallMode              = 'DefaultNativeMode'
                                 FeatureFlag                = $null
                                 FailoverClusterNetworkName = $null
                                 Features                   = @(
@@ -145,13 +145,13 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                                     'SQL_SHARED_MR', 'Tools', 'BC', 'Conn', 'DREPLAY_CTLR',
                                     'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB'
                                 )
-                                InstanceID                 = "mock"
-                                InstallSharedDir           = "c:\mock"
-                                InstallSharedWOWDir        = "c:\mock"
-                                InstanceDir                = "c:\mock"
-                                SQLSvcAccountUsername      = "mockUser"
+                                InstanceID                 = 'mock'
+                                InstallSharedDir           = 'c:\mock'
+                                InstallSharedWOWDir        = 'c:\mock'
+                                InstanceDir                = 'c:\mock'
+                                SQLSvcAccountUsername      = 'mockUser'
                                 SqlSvcStartupType          = $null
-                                AgtSvcAccountUsername      = "mockUser"
+                                AgtSvcAccountUsername      = 'mockUser'
                                 AgtSvcStartupType          = $null
                                 SQLCollation               = $null
                                 SQLSysAdminAccounts        = $null
@@ -167,10 +167,10 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                                 SqlTempdbLogFileSize       = $null
                                 SqlTempdbLogFileGrowth     = $null
                                 SQLBackupDir               = $null
-                                FTSvcAccountUsername       = "mockUser"
-                                RSSvcAccountUsername       = "mockUser"
+                                FTSvcAccountUsername       = 'mockUser'
+                                RSSvcAccountUsername       = 'mockUser'
                                 RsSvcStartupType           = $null
-                                ASSvcAccountUsername       = "mockUser"
+                                ASSvcAccountUsername       = 'mockUser'
                                 AsSvcStartupType           = $null
                                 ASCollation                = $null
                                 ASSysAdminAccounts         = $null
@@ -180,13 +180,13 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                                 ASTempDir                  = $null
                                 ASConfigDir                = $null
                                 ASServerMode               = $null
-                                ISSvcAccountUsername       = "mockUser"
+                                ISSvcAccountUsername       = 'mockUser'
                                 IsSvcStartupType           = $null
                                 FailoverClusterGroupName   = $null
                                 FailoverClusterIPAddress   = $null
                                 UseEnglish                 = $true
+                            }
                         }
-                    }
                 }
             }
 
@@ -196,7 +196,6 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
 
                     $currentState | Convertto-JSON | Write-Verbose -Verbose
 
-                    $currentState.InstanceName | Should -Be 'NamedInstance'
                     $currentState.SourcePath | Should -Be 'C:\this\is\a\mocked\path\'
                     $currentState.SourceCredential.UserName | Should -Be $script:mockCredential.UserName
                     ($currentState.Features | Sort-Object) | Should -Be (@(
@@ -211,14 +210,14 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                     $currentState.InstanceID | Should -Be 'mock'
                     $currentState.InstanceName | Should -Be 'mock'
                     $currentState.UpdateEnabled | Should -BeFalse
-                    $currentState.UpdateSource | Should -Be "MU"
-                    $currentState.InstallSharedDir | Should -Be "c:\mock"
-                    $currentState.InstallSharedWOWDir | Should -Be "c:\mock"
+                    $currentState.UpdateSource | Should -Be 'MU'
+                    $currentState.InstallSharedDir | Should -Be 'c:\mock'
+                    $currentState.InstallSharedWOWDir | Should -Be 'c:\mock'
                     $currentState.SQLSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.AgtSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.FTSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.RSSvcAccount.UserName | Should -Be $script:mockCredential.UserName
-                    $currentState.RSInstallMode | Should -Be "DefaultNativeMode"
+                    $currentState.RSInstallMode | Should -Be 'DefaultNativeMode'
                     $currentState.ASSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.ISSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.UseEnglish | Should -BeTrue
@@ -232,9 +231,9 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
             BeforeAll {
                 InModuleScope -ScriptBlock {
                     $script:mockSqlSetupPrepareFailoverClusterInstance = [SqlSetupPrepareFailoverCluster] @{
-                        SourcePath = 'C:\this\is\a\mocked\path\'
-                        SourceCredential = $script:mockCredential
-                        Features = @(
+                        SourcePath          = 'C:\this\is\a\mocked\path\'
+                        SourceCredential    = $script:mockCredential
+                        Features            = @(
                             'SQL', 'SQLEngine', 'Replication', 'FullText', 'DQ', 'PolyBase',
                             'PolyBaseCore', 'PolyBaseJava', 'AdvancedAnalytics', 'SQL_INST_MR',
                             'SQL_INST_MPY', 'SQL_INST_JAVA', 'AS', 'RS', 'RS_SHP', 'RS_SHPWFE',
@@ -242,21 +241,21 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                             'SQL_SHARED_MR', 'Tools', 'BC', 'Conn', 'DREPLAY_CTLR',
                             'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB'
                         )
-                        InstanceDir = 'c:\mock'
-                        InstanceID = 'mock'
-                        InstanceName = 'mock'
-                        UpdateEnabled = $false
-                        UpdateSource = "MU"
-                        InstallSharedDir = "c:\mock"
-                        InstallSharedWOWDir = "c:\mock"
-                        SQLSvcAccount = $script:mockCredential
-                        AgtSvcAccount = $script:mockCredential
-                        FTSvcAccount = $script:mockCredential
-                        RSSvcAccount = $script:mockCredential
-                        RSInstallMode = "DefaultNativeMode"
-                        ASSvcAccount = $script:mockCredential
-                        ISSvcAccount = $script:mockCredential
-                        UseEnglish = $true
+                        InstanceDir         = 'c:\mock'
+                        InstanceID          = 'mock'
+                        InstanceName        = 'mock'
+                        UpdateEnabled       = $false
+                        UpdateSource        = 'MU'
+                        InstallSharedDir    = 'c:\mock'
+                        InstallSharedWOWDir = 'c:\mock'
+                        SQLSvcAccount       = $script:mockCredential
+                        AgtSvcAccount       = $script:mockCredential
+                        FTSvcAccount        = $script:mockCredential
+                        RSSvcAccount        = $script:mockCredential
+                        RSInstallMode       = 'DefaultNativeMode'
+                        ASSvcAccount        = $script:mockCredential
+                        ISSvcAccount        = $script:mockCredential
+                        UseEnglish          = $true
                     }
 
                     <#
@@ -267,65 +266,65 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                         to get the result to return from the derived method Get().
                     #>
                     $script:mockSqlSetupPrepareFailoverClusterInstance |
-                    Add-Member -Force -MemberType 'ScriptMethod' -Name 'GetCurrentState' -Value {
-                        return [System.Collections.Hashtable] @{
-                            Action                     = "PrepareFailoverCluster"
-                            SourcePath                 = "c:\this\is\a\mocked\path\"
-                            SourceCredential           = $script:mockCredential
-                            InstanceName               = "mock2"
-                            RSInstallMode              = "DefaultNativeMode"
-                            FeatureFlag                = $null
-                            FailoverClusterNetworkName = $null
-                            Features                   = @(
-                                'SQL', 'SQLEngine', 'Replication', 'FullText', 'DQ', 'PolyBase',
-                                'PolyBaseCore', 'PolyBaseJava', 'AdvancedAnalytics', 'SQL_INST_MR',
-                                'SQL_INST_MPY', 'SQL_INST_JAVA', 'AS', 'RS', 'RS_SHP', 'RS_SHPWFE',
-                                'DQC', 'IS', 'IS_Master', 'IS_Worker', 'MDS', 'SQL_SHARED_MPY',
-                                'SQL_SHARED_MR', 'Tools', 'BC', 'Conn', 'DREPLAY_CTLR',
-                                'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB'
-                            )
-                            InstanceID                 = "mock2"
-                            InstallSharedDir           = "c:\mock"
-                            InstallSharedWOWDir        = "c:\mock"
-                            InstanceDir                = "c:\mock"
-                            SQLSvcAccountUsername      = "mockUser"
-                            SqlSvcStartupType          = $null
-                            AgtSvcAccountUsername      = "mockUser"
-                            AgtSvcStartupType          = $null
-                            SQLCollation               = $null
-                            SQLSysAdminAccounts        = $null
-                            SecurityMode               = $null
-                            InstallSQLDataDir          = $null
-                            SQLUserDBDir               = $null
-                            SQLUserDBLogDir            = $null
-                            SQLTempDBDir               = $null
-                            SQLTempDBLogDir            = $null
-                            SqlTempdbFileCount         = $null
-                            SqlTempdbFileSize          = $null
-                            SqlTempdbFileGrowth        = $null
-                            SqlTempdbLogFileSize       = $null
-                            SqlTempdbLogFileGrowth     = $null
-                            SQLBackupDir               = $null
-                            FTSvcAccountUsername       = "mockUser"
-                            RSSvcAccountUsername       = "mockUser"
-                            RsSvcStartupType           = $null
-                            ASSvcAccountUsername       = "mockUser"
-                            AsSvcStartupType           = $null
-                            ASCollation                = $null
-                            ASSysAdminAccounts         = $null
-                            ASDataDir                  = $null
-                            ASLogDir                   = $null
-                            ASBackupDir                = $null
-                            ASTempDir                  = $null
-                            ASConfigDir                = $null
-                            ASServerMode               = $null
-                            ISSvcAccountUsername       = "mockUser"
-                            IsSvcStartupType           = $null
-                            FailoverClusterGroupName   = $null
-                            FailoverClusterIPAddress   = $null
-                            UseEnglish                 = $true
+                        Add-Member -Force -MemberType 'ScriptMethod' -Name 'GetCurrentState' -Value {
+                            return [System.Collections.Hashtable] @{
+                                Action                     = 'PrepareFailoverCluster'
+                                SourcePath                 = 'c:\this\is\a\mocked\path\'
+                                SourceCredential           = $script:mockCredential
+                                InstanceName               = 'mock2'
+                                RSInstallMode              = 'DefaultNativeMode'
+                                FeatureFlag                = $null
+                                FailoverClusterNetworkName = $null
+                                Features                   = @(
+                                    'SQL', 'SQLEngine', 'Replication', 'FullText', 'DQ', 'PolyBase',
+                                    'PolyBaseCore', 'PolyBaseJava', 'AdvancedAnalytics', 'SQL_INST_MR',
+                                    'SQL_INST_MPY', 'SQL_INST_JAVA', 'AS', 'RS', 'RS_SHP', 'RS_SHPWFE',
+                                    'DQC', 'IS', 'IS_Master', 'IS_Worker', 'MDS', 'SQL_SHARED_MPY',
+                                    'SQL_SHARED_MR', 'Tools', 'BC', 'Conn', 'DREPLAY_CTLR',
+                                    'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB'
+                                )
+                                InstanceID                 = 'mock2'
+                                InstallSharedDir           = 'c:\mock'
+                                InstallSharedWOWDir        = 'c:\mock'
+                                InstanceDir                = 'c:\mock'
+                                SQLSvcAccountUsername      = 'mockUser'
+                                SqlSvcStartupType          = $null
+                                AgtSvcAccountUsername      = 'mockUser'
+                                AgtSvcStartupType          = $null
+                                SQLCollation               = $null
+                                SQLSysAdminAccounts        = $null
+                                SecurityMode               = $null
+                                InstallSQLDataDir          = $null
+                                SQLUserDBDir               = $null
+                                SQLUserDBLogDir            = $null
+                                SQLTempDBDir               = $null
+                                SQLTempDBLogDir            = $null
+                                SqlTempdbFileCount         = $null
+                                SqlTempdbFileSize          = $null
+                                SqlTempdbFileGrowth        = $null
+                                SqlTempdbLogFileSize       = $null
+                                SqlTempdbLogFileGrowth     = $null
+                                SQLBackupDir               = $null
+                                FTSvcAccountUsername       = 'mockUser'
+                                RSSvcAccountUsername       = 'mockUser'
+                                RsSvcStartupType           = $null
+                                ASSvcAccountUsername       = 'mockUser'
+                                AsSvcStartupType           = $null
+                                ASCollation                = $null
+                                ASSysAdminAccounts         = $null
+                                ASDataDir                  = $null
+                                ASLogDir                   = $null
+                                ASBackupDir                = $null
+                                ASTempDir                  = $null
+                                ASConfigDir                = $null
+                                ASServerMode               = $null
+                                ISSvcAccountUsername       = 'mockUser'
+                                IsSvcStartupType           = $null
+                                FailoverClusterGroupName   = $null
+                                FailoverClusterIPAddress   = $null
+                                UseEnglish                 = $true
+                            }
                         }
-                    }
                 }
             }
 
@@ -335,7 +334,6 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
 
                     $currentState | ConvertTo-Json | Write-Verbose -Verbose
 
-                    $currentState.InstanceName | Should -Be 'NamedInstance'
                     $currentState.SourcePath | Should -Be 'C:\this\is\a\mocked\path\'
                     $currentState.SourceCredential.UserName | Should -Be $script:mockCredential.UserName
                     ($currentState.Features | Sort-Object) | Should -Be (@(
@@ -347,17 +345,17 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                             'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB'
                         ) | Sort-Object)
                     $currentState.InstanceDir | Should -Be 'c:\mock'
-                    $currentState.InstanceID | Should -Be 'mock'
-                    $currentState.InstanceName | Should -Be 'mock'
+                    $currentState.InstanceID | Should -Be 'mock2'
+                    $currentState.InstanceName | Should -Be 'mock2'
                     $currentState.UpdateEnabled | Should -BeFalse
-                    $currentState.UpdateSource | Should -Be "MU"
-                    $currentState.InstallSharedDir | Should -Be "c:\mock"
-                    $currentState.InstallSharedWOWDir | Should -Be "c:\mock"
+                    $currentState.UpdateSource | Should -Be 'MU'
+                    $currentState.InstallSharedDir | Should -Be 'c:\mock'
+                    $currentState.InstallSharedWOWDir | Should -Be 'c:\mock'
                     $currentState.SQLSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.AgtSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.FTSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.RSSvcAccount.UserName | Should -Be $script:mockCredential.UserName
-                    $currentState.RSInstallMode | Should -Be "DefaultNativeMode"
+                    $currentState.RSInstallMode | Should -Be 'DefaultNativeMode'
                     $currentState.ASSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.ISSvcAccount.UserName | Should -Be $script:mockCredential.UserName
                     $currentState.UseEnglish | Should -BeTrue
