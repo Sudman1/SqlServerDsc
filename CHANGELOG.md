@@ -86,6 +86,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       the PowerShell SqlServer stub module when a test has run.
 - SqlWindowsFirewall
   - Added integration tests for SqlWindowsFirewall ([issue #747](https://github.com/dsccommunity/SqlServerDsc/issues/747)).
+- SqlSetupBsse
+  - Encapsulates logic from DSC_SqlSetup for use by new classes created per Action
+- SqlSetupPrepareFailoverCluster
+  - Instantiation of the PrepareFailoverCluster SqlSetup action
 
 ### Changed
 
@@ -217,9 +221,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     [issue #1704](https://github.com/dsccommunity/SqlServerDsc/issues/1704),
     and [issue #752](https://github.com/dsccommunity/SqlServerDsc/issues/752).
   - The resource was refactored into a class-based resource.
-- SqlSetup
-  - Does not attempt to connect to the SQL service when the
-    PrepareFailoverCluster action is defined
 
 ### Fixed
 
