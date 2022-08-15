@@ -30,7 +30,7 @@ class SqlSetupBase : ResourceBase
     #>
     $actionsWithoutServerAccess = @('PrepareFailoverCluster')
 
-    SqlSetupBase() : base ()
+    SqlSetupBase () : base ()
     {
     }
 
