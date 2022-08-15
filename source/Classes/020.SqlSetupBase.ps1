@@ -10,7 +10,6 @@
         resources. This class shall not contain any DSC properties, neither
         shall it contain anything specific to only a single resource.
 #>
-
 class SqlSetupBase : ResourceBase
 {
     [DscProperty()]
