@@ -30,7 +30,7 @@ BeforeDiscovery {
 }
 
 BeforeAll {
-    $script:dscModuleName = 'SqlServerDsc'
+    $script:dscModuleName = 'SqlServerDscX'
 
     Import-Module -Name $script:dscModuleName
 
@@ -149,6 +149,8 @@ Describe 'SqlSetupPrepareFailoverCluster\Get()' -Tag 'Get' {
                                 InstallSharedDir           = 'c:\mock'
                                 InstallSharedWOWDir        = 'c:\mock'
                                 InstanceDir                = 'c:\mock'
+                                UpdateEnabled              = $false
+                                UpdateSource               = 'MU'
                                 SQLSvcAccountUsername      = 'mockUser'
                                 SqlSvcStartupType          = $null
                                 AgtSvcAccountUsername      = 'mockUser'
@@ -1740,7 +1742,7 @@ Describe 'SqlSetupPrepareFailoverCluster\AssertProperties()' -Tag 'AssertPropert
 
     #
         These tests just check for the string localized ID. Since the error is part
-        of a command outside of SqlServerDsc, a small changes to the localized
+        of a command outside of SqlServerDscX, a small changes to the localized
         string should not fail these tests.
     #
     Context 'When passing mutually exclusive parameters' {
