@@ -65,7 +65,7 @@ class SqlSetupPrepareFailoverCluster : SqlSetupBase
         'SQL_SHARED_MR', 'Tools', 'BC', 'Conn', 'DREPLAY_CTLR',
         'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB'
     )]
-    [System.String]
+    [System.String[]]
     $Features
 
     [DscProperty()]
@@ -129,7 +129,7 @@ class SqlSetupPrepareFailoverCluster : SqlSetupBase
     [System.Boolean]
     $UseEnglish
 
-    SqlSetupPrepareFailoverCluster() : base ()
+    SqlSetupPrepareFailoverCluster () : base ()
     {
         $this.Action = "PrepareFailoverCluster"
     }
