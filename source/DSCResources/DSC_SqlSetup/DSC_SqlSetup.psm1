@@ -540,7 +540,7 @@ function Get-TargetResource
         Install mode for Reporting Services.
 
     .PARAMETER ASSvcAccount
-       Service account for Analysis Services service.
+        Service account for Analysis Services service.
 
     .PARAMETER ASCollation
         Collation for Analysis Services.
@@ -1028,6 +1028,27 @@ function Set-TargetResource
     if ($PSBoundParameters.ContainsKey('SkipRule'))
     {
         $setupArguments['SkipRules'] = @($SkipRule)
+    }
+
+    if ($Action -eq "AddNode")
+    {
+        if ($PSBoundParameters.ContainsKey('SQLSvcAccount'))
+        {
+            $setupArguments['SQLSVCACCOUNT'] = $SQLSvcAccount.UserName
+            if (-not $setupArguments['SQLSVCACCOUNT'].EndsWith('$'))
+            {
+                $setupArguments['SQLSVCPASSWORD'] = $SQLSvcAccount.GetNetworkCredential().Password
+            }
+        }
+
+        if ($PSBoundParameters.ContainsKey('AgtSvcAccount'))
+        {
+            $setupArguments['AGTSVCACCOUNT'] = $AgtSvcAccount.UserName
+            if (-not $setupArguments['AGTSVCACCOUNT'].EndsWith('$'))
+            {
+                $setupArguments['SAGTSVCPASSWORD'] = $AgtSvcAccount.GetNetworkCredential().Password
+            }
+        }
     }
 
     <#
