@@ -1030,27 +1030,6 @@ function Set-TargetResource
         $setupArguments['SkipRules'] = @($SkipRule)
     }
 
-    if ($Action -eq "AddNode")
-    {
-        if ($PSBoundParameters.ContainsKey('SQLSvcAccount'))
-        {
-            $setupArguments['SQLSVCACCOUNT'] = $SQLSvcAccount.UserName
-            if (-not $setupArguments['SQLSVCACCOUNT'].EndsWith('$'))
-            {
-                $setupArguments['SQLSVCPASSWORD'] = $SQLSvcAccount.GetNetworkCredential().Password
-            }
-        }
-
-        if ($PSBoundParameters.ContainsKey('AgtSvcAccount'))
-        {
-            $setupArguments['AGTSVCACCOUNT'] = $AgtSvcAccount.UserName
-            if (-not $setupArguments['AGTSVCACCOUNT'].EndsWith('$'))
-            {
-                $setupArguments['SAGTSVCPASSWORD'] = $AgtSvcAccount.GetNetworkCredential().Password
-            }
-        }
-    }
-
     <#
         Set the failover cluster group name and failover cluster network name for this clustered instance
         if the action is either installing (InstallFailoverCluster) or completing (CompleteFailoverCluster) a cluster.
@@ -1454,6 +1433,28 @@ function Set-TargetResource
         if ($PSBoundParameters.ContainsKey('IsSvcStartupType'))
         {
             $setupArguments['IsSvcStartupType'] = $IsSvcStartupType
+        }
+    }
+
+    # Ensure SQLSVCAccount and AGTSVCACCOUNT are passed for the AddNode Action
+    if ($Action -eq 'AddNode')
+    {
+        if ($PSBoundParameters.ContainsKey('SQLSvcAccount'))
+        {
+            $setupArguments['SQLSVCACCOUNT'] = $SQLSvcAccount.UserName
+            if (-not $setupArguments['SQLSVCACCOUNT'].EndsWith('$'))
+            {
+                $setupArguments['SQLSVCPASSWORD'] = $SQLSvcAccount.GetNetworkCredential().Password
+            }
+        }
+
+        if ($PSBoundParameters.ContainsKey('AgtSvcAccount'))
+        {
+            $setupArguments['AGTSVCACCOUNT'] = $AgtSvcAccount.UserName
+            if (-not $setupArguments['AGTSVCACCOUNT'].EndsWith('$'))
+            {
+                $setupArguments['AGTSVCPASSWORD'] = $AgtSvcAccount.GetNetworkCredential().Password
+            }
         }
     }
 
