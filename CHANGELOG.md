@@ -86,6 +86,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       the PowerShell SqlServer stub module when a test has run.
 - SqlWindowsFirewall
   - Added integration tests for SqlWindowsFirewall ([issue #747](https://github.com/dsccommunity/SqlServerDsc/issues/747)).
+- SqlSetup
+  - Added parameters for AddNode (Issue #1171)
 
 ### Changed
 
